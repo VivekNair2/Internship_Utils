@@ -1,0 +1,100 @@
+package main
+
+import (
+    "math"
+    "testing"
+    "github.com/stretchr/testify/assert"
+)
+
+func TestFindAreaOfRectangle(t *testing.T) {
+    testCases := []struct {
+        description string
+        length      float64
+        breadth     float64
+        expected    float64
+        useDelta    bool
+        delta       float64
+    }{
+        {
+            description: "test area calculation with length=5, breadth=4, should return 20",
+            length:      5,
+            breadth:     4,
+            expected:    20.0,
+        },
+        {
+            description: "test area calculation with length=1, breadth=1, should return 1",
+            length:      1,
+            breadth:     1,
+            expected:    1.0,
+        },
+        {
+            description: "test area calculation with length=2.5, breadth=3.5, should return 8.75",
+            length:      2.5,
+            breadth:     3.5,
+            expected:    8.75,
+        },
+        {
+            description: "test area with length=0, breadth=5, should return 0",
+            length:      0,
+            breadth:     5,
+            expected:    0.0,
+        },
+        {
+            description: "test area with length=0, breadth=0, should return 0",
+            length:      0,
+            breadth:     0,
+            expected:    0.0,
+        },
+        {
+            description: "test validation with length=-5, breadth=4, should return -1",
+            length:      -5,
+            breadth:     4,
+            expected:    -1.0,
+        },
+        {
+            description: "test validation with length=-5, breadth=-4, should return -1",
+            length:      -5,
+            breadth:     -4,
+            expected:    -1.0,
+        },
+        {
+            description: "test validation with length=+Infinity, breadth=5, should return -1 ",
+            length:      math.Inf(1),
+            breadth:     5,
+            expected:    -1.0,
+        },
+        {
+            description: "test validation with length=-Infinity, breadth=5, should return -1 ",
+            length:      math.Inf(-1),
+            breadth:     5,
+            expected:    -1.0,
+        },
+        {
+            description: "test validation with length=+Infinity, breadth=+Infinity, should return -1 ",
+            length:      math.Inf(1),
+            breadth:     math.Inf(1),
+            expected:    -1.0,
+        },
+        {
+            description: "test area calculation with length=1e-10, breadth=1e-10, should return ~1e-20 ",
+            length:      1e-10,
+            breadth:     1e-10,
+            expected:    1e-20,
+            useDelta:    true,
+            delta:       1e-30,
+        },
+    }
+
+    for _, tc := range testCases {
+        t.Run(tc.description, func(t *testing.T) {
+            rect := Rectangle{Length: tc.length, Breadth: tc.breadth}
+            result := FindAreaOfRectangle(rect)
+
+            if tc.useDelta {
+                assert.InDelta(t, tc.expected, result, tc.delta)
+            } else {
+                assert.Equal(t, tc.expected, result)
+            }
+        })
+    }
+}
