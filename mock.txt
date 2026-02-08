@@ -1,0 +1,20 @@
+func TestGetUserName_Error(t *testing.T) {
+    mockDB := new(MockDB)
+
+    mockDB.
+        On("GetUser", 1).
+        Return(User{}, fmt.Errorf("db error"))
+
+    service := NewUserService(mockDB)
+
+    _, err := service.GetUserName(1)
+
+    if err == nil {
+        t.Error("expected error, got nil")
+    }
+
+    mockDB.AssertExpectations(t)
+}
+
+
+
